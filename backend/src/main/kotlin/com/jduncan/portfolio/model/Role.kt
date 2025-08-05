@@ -1,11 +1,6 @@
 package com.jduncan.portfolio.model
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
-import jakarta.persistence.Column
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "roles")
@@ -15,5 +10,5 @@ data class Role(
     val id: Long = 0,
 
     @Column(name = "name", nullable = false, unique = true)
-    val name: String
+    val name: String = ""
 )

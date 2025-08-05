@@ -1,0 +1,73 @@
+# === Root ===========================================
+# macOS and Windows system files
+.DS_Store
+Thumbs.db
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.iml
+
+# Environment variable files
+.env
+.env.*
+
+# Coverage results
+coverage/
+
+# === Frontend (React + Vite + TypeScript) ========
+# Dependencies
+/frontend/node_modules/
+/frontend/.pnpm/
+
+# Build output
+/frontend/dist/
+/frontend/build/
+/frontend/.vite/
+
+# Caches
+/frontend/.cache/
+
+# Logs
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/pnpm-debug.log*
+/frontend/*.log
+
+# TypeScript build info
+/frontend/*.tsbuildinfo
+
+# === Backend (Spring + Kotlin) ====================
+# Gradle build
+/backend/.gradle/
+/backend/build/
+/backend/out/
+
+# Keep gradle wrapper jar
+!/backend/gradle/wrapper/gradle-wrapper.jar
+
+# Maven wrapper (optional)
+/backend/.mvn/
+/backend/mvnw
+/backend/mvnw.cmd
+
+# Application logs
+/backend/logs/
+/backend/*.log
+
+# Kotlin/Java artifacts
+/backend/**/*.class
+/backend/**/*.jar
+/backend/**/*.war
+/backend/**/*.ear
+
+# Kotlin metadata
+/backend/*.kotlin_module
+
+# === Miscellaneous ================================
+# Optional npm/yarn artifacts
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# End of .gitignore file

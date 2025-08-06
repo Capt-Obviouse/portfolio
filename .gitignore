@@ -55,6 +55,9 @@ coverage/
 /backend/logs/
 /backend/*.log
 
+# Backend target directory
+/backend/target/
+
 # Kotlin/Java artifacts
 /backend/**/*.class
 /backend/**/*.jar

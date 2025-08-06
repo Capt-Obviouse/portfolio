@@ -51,3 +51,6 @@ src/main/kotlin/com/jduncan/portfolio/service/TestimonialService.kt 2025-08-06T0
 src/main/kotlin/com/jduncan/portfolio/service/UserDetailsService.kt 2025-08-06T02:45:39.400636863Z
 src/main/kotlin/com/jduncan/portfolio/startup/DataLoader.kt 2025-08-06T02:45:39.248789334Z
 src/test/kotlin/com/jduncan/portfolio/PortfolioApplicationTests.kt 2025-08-06T02:45:38.965358311Z
+src/test/kotlin/com/jduncan/portfolio/controller/BlogPostControllerTest.kt 2025-08-06T04:50:51.600797378Z
+src/test/kotlin/com/jduncan/portfolio/integration/BlogPostIntegrationTest.kt 2025-08-06T04:50:51.600797378Z
+src/test/kotlin/com/jduncan/portfolio/service/BlogPostServiceTest.kt 2025-08-06T04:31:42.149027401Z

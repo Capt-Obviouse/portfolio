@@ -1,8 +1,11 @@
 package com.jduncan.portfolio.controller
 
-import com.jduncan.portfolio.model.Testimonial
-import com.jduncan.portfolio.repo.TestimonialRepository
+import com.jduncan.portfolio.dto.CreateTestimonialRequest
+import com.jduncan.portfolio.dto.TestimonialResponse
+import com.jduncan.portfolio.dto.UpdateTestimonialRequest
+import com.jduncan.portfolio.service.TestimonialService
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -16,46 +19,84 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/testimonials")
-class TestimonialController(private val testimonialRepository: TestimonialRepository) {
+class TestimonialController(private val testimonialService: TestimonialService) {
 
-  @GetMapping("/")
+  @GetMapping
   @Operation(summary = "Get all published testimonials")
-  fun getPublishedTestimonials(): List<Testimonial> {
-    return testimonialRepository.findByIsPublishedTrueOrderByTestimonialDateDesc()
+  fun getPublishedTestimonials(): List<TestimonialResponse> {
+    return testimonialService.getAllPublishedTestimonials()
   }
 
   @GetMapping("/unpublished")
   @Operation(summary = "Get all unpublished testimonials")
-  fun getUnpublishedTestimonials(): List<Testimonial> {
-    return testimonialRepository.findByIsPublishedFalseOrderByTestimonialDateDesc()
+  fun getUnpublishedTestimonials(): List<TestimonialResponse> {
+    return testimonialService.getAllUnpublishedTestimonials()
+  }
+
+  @GetMapping("/{id}")
+  @Operation(summary = "Get a testimonial by ID")
+  fun getTestimonial(@PathVariable id: Long): ResponseEntity<TestimonialResponse> {
+    val testimonial = testimonialService.getTestimonialById(id)
+    return if (testimonial != null) {
+      ResponseEntity.ok(testimonial)
+    } else {
+      ResponseEntity.notFound().build()
+    }
   }
 
   @PostMapping
   @Operation(summary = "Create a new testimonial")
-  fun createTestimonial(@RequestBody testimonial: Testimonial): Testimonial {
-    return testimonialRepository.save(testimonial)
+  fun createTestimonial(
+    @Valid @RequestBody request: CreateTestimonialRequest
+  ): ResponseEntity<TestimonialResponse> {
+    val createdTestimonial = testimonialService.createTestimonial(request)
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdTestimonial)
   }
 
   @PutMapping("/{id}")
   @Operation(summary = "Update a testimonial")
   fun updateTestimonial(
     @PathVariable id: Long,
-    @RequestBody testimonial: Testimonial
-  ): Testimonial {
-    val existingTestimonial = testimonialRepository.findById(id).orElse(null)
-    if (existingTestimonial != null) {
-      return testimonialRepository.save(testimonial.copy(id = id))
+    @Valid @RequestBody request: UpdateTestimonialRequest
+  ): ResponseEntity<TestimonialResponse> {
+    val updatedTestimonial = testimonialService.updateTestimonial(id, request)
+    return if (updatedTestimonial != null) {
+      ResponseEntity.ok(updatedTestimonial)
+    } else {
+      ResponseEntity.notFound().build()
     }
-    throw RuntimeException("Testimonial not found")
   }
 
   @DeleteMapping("/{id}")
   @Operation(summary = "Delete a testimonial")
   fun deleteTestimonial(@PathVariable id: Long): ResponseEntity<Void> {
-    val testimonial = testimonialRepository.findById(id).orElse(null)
-    if (testimonial != null) {
-      testimonialRepository.delete(testimonial)
+    val deleted = testimonialService.deleteTestimonial(id)
+    return if (deleted) {
+      ResponseEntity.noContent().build()
+    } else {
+      ResponseEntity.notFound().build()
     }
-    return ResponseEntity(HttpStatus.NO_CONTENT)
+  }
+
+  @PutMapping("/{id}/publish")
+  @Operation(summary = "Publish a testimonial")
+  fun publishTestimonial(@PathVariable id: Long): ResponseEntity<TestimonialResponse> {
+    val publishedTestimonial = testimonialService.publishTestimonial(id)
+    return if (publishedTestimonial != null) {
+      ResponseEntity.ok(publishedTestimonial)
+    } else {
+      ResponseEntity.notFound().build()
+    }
+  }
+
+  @PutMapping("/{id}/unpublish")
+  @Operation(summary = "Unpublish a testimonial")
+  fun unpublishTestimonial(@PathVariable id: Long): ResponseEntity<TestimonialResponse> {
+    val unpublishedTestimonial = testimonialService.unpublishTestimonial(id)
+    return if (unpublishedTestimonial != null) {
+      ResponseEntity.ok(unpublishedTestimonial)
+    } else {
+      ResponseEntity.notFound().build()
+    }
   }
 }

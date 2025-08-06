@@ -1,7 +1,10 @@
 package com.jduncan.portfolio.controller
 
-import com.jduncan.portfolio.model.BlogPost
-import com.jduncan.portfolio.repo.BlogPostRepository
+import com.jduncan.portfolio.dto.BlogPostResponse
+import com.jduncan.portfolio.dto.CreateBlogPostRequest
+import com.jduncan.portfolio.dto.UpdateBlogPostRequest
+import com.jduncan.portfolio.service.BlogPostService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -15,21 +18,21 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/blog-posts")
-class BlogPostController(private val blogPostRepository: BlogPostRepository) {
+class BlogPostController(private val blogPostService: BlogPostService) {
 
   @GetMapping
-  fun getPublishedBlogPosts(): List<BlogPost> {
-    return blogPostRepository.findByIsPublishedTrueOrderByPublishedDateDesc()
+  fun getPublishedBlogPosts(): List<BlogPostResponse> {
+    return blogPostService.getAllPublishedBlogPosts()
   }
 
   @GetMapping("/unpublished")
-  fun getUnpublishedBlogPosts(): List<BlogPost> {
-    return blogPostRepository.findByIsPublishedFalseOrderByPublishedDateDesc()
+  fun getUnpublishedBlogPosts(): List<BlogPostResponse> {
+    return blogPostService.getAllUnpublishedBlogPosts()
   }
 
   @GetMapping("/{id}")
-  fun getBlogPost(@PathVariable id: Long): ResponseEntity<BlogPost> {
-    val blogPost = blogPostRepository.findById(id).orElse(null)
+  fun getBlogPost(@PathVariable id: Long): ResponseEntity<BlogPostResponse> {
+    val blogPost = blogPostService.getBlogPostById(id)
     return if (blogPost != null) {
       ResponseEntity.ok(blogPost)
     } else {
@@ -38,18 +41,20 @@ class BlogPostController(private val blogPostRepository: BlogPostRepository) {
   }
 
   @PostMapping
-  fun createBlogPost(@RequestBody blogPost: BlogPost): BlogPost {
-    return blogPostRepository.save(blogPost)
+  fun createBlogPost(
+    @Valid @RequestBody request: CreateBlogPostRequest
+  ): ResponseEntity<BlogPostResponse> {
+    val createdBlogPost = blogPostService.createBlogPost(request)
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdBlogPost)
   }
 
   @PutMapping("/{id}")
   fun updateBlogPost(
     @PathVariable id: Long,
-    @RequestBody blogPost: BlogPost
-  ): ResponseEntity<BlogPost> {
-    val existingBlogPost = blogPostRepository.findById(id).orElse(null)
-    return if (existingBlogPost != null) {
-      val updatedBlogPost = blogPostRepository.save(blogPost.copy(id = id))
+    @Valid @RequestBody request: UpdateBlogPostRequest
+  ): ResponseEntity<BlogPostResponse> {
+    val updatedBlogPost = blogPostService.updateBlogPost(id, request)
+    return if (updatedBlogPost != null) {
       ResponseEntity.ok(updatedBlogPost)
     } else {
       ResponseEntity.notFound().build()
@@ -58,10 +63,29 @@ class BlogPostController(private val blogPostRepository: BlogPostRepository) {
 
   @DeleteMapping("/{id}")
   fun deleteBlogPost(@PathVariable id: Long): ResponseEntity<Void> {
-    val blogPost = blogPostRepository.findById(id).orElse(null)
-    return if (blogPost != null) {
-      blogPostRepository.delete(blogPost)
-      ResponseEntity(HttpStatus.NO_CONTENT)
+    val deleted = blogPostService.deleteBlogPost(id)
+    return if (deleted) {
+      ResponseEntity.noContent().build()
+    } else {
+      ResponseEntity.notFound().build()
+    }
+  }
+
+  @PutMapping("/{id}/publish")
+  fun publishBlogPost(@PathVariable id: Long): ResponseEntity<BlogPostResponse> {
+    val publishedBlogPost = blogPostService.publishBlogPost(id)
+    return if (publishedBlogPost != null) {
+      ResponseEntity.ok(publishedBlogPost)
+    } else {
+      ResponseEntity.notFound().build()
+    }
+  }
+
+  @PutMapping("/{id}/unpublish")
+  fun unpublishBlogPost(@PathVariable id: Long): ResponseEntity<BlogPostResponse> {
+    val unpublishedBlogPost = blogPostService.unpublishBlogPost(id)
+    return if (unpublishedBlogPost != null) {
+      ResponseEntity.ok(unpublishedBlogPost)
     } else {
       ResponseEntity.notFound().build()
     }

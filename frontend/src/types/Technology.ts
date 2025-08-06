@@ -30,43 +30,63 @@ export class TechnologyUtils {
   /**
    * Get display name from category enum name
    */
-  static getDisplayName(categoryName: string, categoryMap: Record<string, string>): string {
+  static getDisplayName(
+    categoryName: string,
+    categoryMap: Record<string, string>,
+  ): string {
     return categoryMap[categoryName] || categoryName;
   }
 
   /**
    * Get category enum name from display name
    */
-  static getCategoryName(displayName: string, categoryMap: Record<string, string>): string | undefined {
-    return Object.entries(categoryMap).find(([_, value]) => value === displayName)?.[0];
+  static getCategoryName(
+    displayName: string,
+    categoryMap: Record<string, string>,
+  ): string | undefined {
+    return Object.entries(categoryMap).find(
+      ([_, value]) => value === displayName,
+    )?.[0];
   }
 
   /**
    * Check if a category name is valid
    */
-  static isValidCategory(categoryName: string, categoryNames: string[]): boolean {
+  static isValidCategory(
+    categoryName: string,
+    categoryNames: string[],
+  ): boolean {
     return categoryNames.includes(categoryName);
   }
 
   /**
    * Filter technologies by category
    */
-  static filterByCategory(technologies: Technology[], category: string): Technology[] {
-    return technologies.filter(tech => tech.category === category);
+  static filterByCategory(
+    technologies: Technology[],
+    category: string,
+  ): Technology[] {
+    return technologies.filter((tech) => tech.category === category);
   }
 
   /**
    * Group technologies by category
    */
-  static groupByCategory(technologies: Technology[], categoryMap: Record<string, string>): Record<string, Technology[]> {
-    return technologies.reduce((groups, tech) => {
-      const displayName = this.getDisplayName(tech.category, categoryMap);
-      if (!groups[displayName]) {
-        groups[displayName] = [];
-      }
-      groups[displayName].push(tech);
-      return groups;
-    }, {} as Record<string, Technology[]>);
+  static groupByCategory(
+    technologies: Technology[],
+    categoryMap: Record<string, string>,
+  ): Record<string, Technology[]> {
+    return technologies.reduce(
+      (groups, tech) => {
+        const displayName = this.getDisplayName(tech.category, categoryMap);
+        if (!groups[displayName]) {
+          groups[displayName] = [];
+        }
+        groups[displayName].push(tech);
+        return groups;
+      },
+      {} as Record<string, Technology[]>,
+    );
   }
 }
 
@@ -76,9 +96,9 @@ export const TechnologyAPI = {
    * Fetch all technology categories
    */
   async getCategories(): Promise<TechnologyCategoryResponse> {
-    const response = await fetch('/api/technologies/categories');
+    const response = await fetch("/api/technologies/categories");
     if (!response.ok) {
-      throw new Error('Failed to fetch technology categories');
+      throw new Error("Failed to fetch technology categories");
     }
     return response.json();
   },
@@ -87,9 +107,9 @@ export const TechnologyAPI = {
    * Fetch all technologies
    */
   async getTechnologies(): Promise<Technology[]> {
-    const response = await fetch('/api/technologies');
+    const response = await fetch("/api/technologies");
     if (!response.ok) {
-      throw new Error('Failed to fetch technologies');
+      throw new Error("Failed to fetch technologies");
     }
     return response.json();
   },
@@ -97,17 +117,19 @@ export const TechnologyAPI = {
   /**
    * Create a new technology
    */
-  async createTechnology(technology: Omit<Technology, 'id' | 'publishedDate' | 'lastModifiedDate'>): Promise<Technology> {
-    const response = await fetch('/api/technologies', {
-      method: 'POST',
+  async createTechnology(
+    technology: Omit<Technology, "id" | "publishedDate" | "lastModifiedDate">,
+  ): Promise<Technology> {
+    const response = await fetch("/api/technologies", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(technology),
     });
     if (!response.ok) {
-      throw new Error('Failed to create technology');
+      throw new Error("Failed to create technology");
     }
     return response.json();
-  }
-}; 
+  },
+};

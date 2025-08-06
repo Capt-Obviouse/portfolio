@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ProjectRepository : JpaRepository<Project, Long> {
-    fun findByIsPublishedTrueOrderByPublishedDateDesc() : List<Project>
-    fun findByIsPublishedFalseOrderByPublishedDateDesc() : List<Project>
-}
+  fun findByIsPublishedTrueOrderByPublishedDateDesc(): List<Project>
 
+  fun findByIsPublishedFalseOrderByPublishedDateDesc(): List<Project>
+}

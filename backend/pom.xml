@@ -162,11 +162,6 @@
                         <plugin>jpa</plugin>
                     </compilerPlugins>
                     <jvmTarget>${java.version}</jvmTarget>
-                    <kotlin>
-                        <ktfmt>
-                            <version>0.56</version>
-                        </ktfmt>
-                    </kotlin>
                 </configuration>
                 <executions>
                     <execution>
@@ -194,6 +189,38 @@
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+
+            <!-- Spotless Code Formatting Plugin -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.43.0</version>
+                <configuration>
+                    <kotlin>
+                        <includes>
+                            <include>src/main/kotlin/**/*.kt</include>
+                            <include>src/test/kotlin/**/*.kt</include>
+                        </includes>
+                        <ktfmt>
+                            <version>0.44</version>
+                            <style>GOOGLE</style>
+                        </ktfmt>
+                    </kotlin>
+                    <kotlinGradle>
+                        <ktfmt>
+                            <version>0.44</version>
+                            <style>GOOGLE</style>
+                        </ktfmt>
+                    </kotlinGradle>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

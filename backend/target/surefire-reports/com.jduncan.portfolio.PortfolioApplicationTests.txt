@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.jduncan.portfolio.PortfolioApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.518 s -- in com.jduncan.portfolio.PortfolioApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.626 s -- in com.jduncan.portfolio.PortfolioApplicationTests

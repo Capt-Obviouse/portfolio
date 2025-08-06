@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface TestimonialRepository : JpaRepository<Testimonial, Long> {
-    fun findByIsPublishedTrueOrderByTestimonialDateDesc() : List<Testimonial>
-    fun findByIsPublishedFalseOrderByTestimonialDateDesc() : List<Testimonial>
+  fun findByIsPublishedTrueOrderByTestimonialDateDesc(): List<Testimonial>
+
+  fun findByIsPublishedFalseOrderByTestimonialDateDesc(): List<Testimonial>
 }

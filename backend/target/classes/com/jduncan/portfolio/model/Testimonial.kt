@@ -10,15 +10,13 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "testimonials")
 data class Testimonial(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
-    val name: String,
-    val title: String,
-    val company: String,
-    val content: String,
-    val imageUrl: String? = null,
-    val isPublished: Boolean = false,
-    val testimonialDate: LocalDateTime = LocalDateTime.now(),
-    val lastModifiedDate: LocalDateTime = LocalDateTime.now()
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long = 0,
+  val name: String,
+  val title: String,
+  val company: String,
+  val content: String,
+  val imageUrl: String? = null,
+  val isPublished: Boolean = false,
+  val testimonialDate: LocalDateTime = LocalDateTime.now(),
+  val lastModifiedDate: LocalDateTime = LocalDateTime.now()
 )

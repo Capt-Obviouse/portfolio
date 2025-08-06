@@ -5,25 +5,23 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Column
-import jakarta.persistence.JoinColumn
+import jakarta.persistence.Enumerated
+import jakarta.persistence.EnumType
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "projects")
-data class Project(
+@Table(name = "technologies")
+data class Technology(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    val id: Long,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
     val name: String,
-    val description: String,
-    val image: String,
-    val link: String,
-    val githubLink: String,
-    val technologies: String,
-    val role: String,
-    val startDate: String,
+    @Enumerated(EnumType.STRING)
+    val category: TechnologyCategory,
+    val description: String? = null,
+    val iconUrl: String? = null,
+    val proficiencyLevel: Int? = null,
+    val yearsOfExperience: Double? = null,
     val isPublished: Boolean = false,
     val publishedDate: LocalDateTime = LocalDateTime.now(),
     val lastModifiedDate: LocalDateTime = LocalDateTime.now()

@@ -16,15 +16,20 @@ import org.springframework.http.HttpStatus
 
 @RestController
 @RequestMapping("/api/projects")
-class ProjectController {
-
-    @Autowired
-    private lateinit var projectRepository: ProjectRepository
+class ProjectController(
+    private val projectRepository: ProjectRepository
+) {
 
     @GetMapping
-    fun getProjects(): List<Project> {
-        return projectRepository.findAll()
+    fun getPublishedProjects(): List<Project> {
+        return projectRepository.findByIsPublishedTrueOrderByPublishedDateDesc()
     }
+
+    @GetMapping("/unpublished")
+    fun getUnpublishedProjects(): List<Project> {
+        return projectRepository.findByIsPublishedFalseOrderByPublishedDateDesc()
+    }
+
     @PostMapping
     fun createProject(@RequestBody project: Project): Project {
         return projectRepository.save(project)
